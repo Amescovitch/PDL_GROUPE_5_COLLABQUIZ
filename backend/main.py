@@ -39,3 +39,5 @@ async def websocket_endpoint(websocket: WebSocket, session_id: str):
             await websocket.send_text(f"echo: {data}")
     except Exception:
         await websocket.close()
+
+
