@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Text, Boolean, DateTime, ForeignKey, Float, Table, Enum
 from sqlalchemy.orm import relationship
 from datetime import datetime
-from db import Base
+from database import Base
 import enum
 class Tag(Base):
     __tablename__ = "tags"
