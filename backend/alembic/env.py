@@ -6,7 +6,8 @@ from alembic import context
 
 # --- Import des configurations ---
 from app.database import Base
-import app.models  # ⚠️ important pour que Base connaisse toutes les tables
+from app.models import *
+from app.config  import settings
 
 # --- Alembic Config ---
 config = context.config
