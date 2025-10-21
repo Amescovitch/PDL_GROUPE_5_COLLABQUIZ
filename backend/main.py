@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 try:
     from backend.config import settings  # type: ignore
 except Exception:
-    from config import settings
+    from .config import settings
 
 app = FastAPI(title="CollabQuiz API")
 
