@@ -1,40 +1,46 @@
 from logging.config import fileConfig
 import os
 
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
-
+from sqlalchemy import engine_from_config, pool
 from alembic import context
 
-# this is the Alembic Config object, which provides
-# access to the values within the .ini file in use.
+# --- Import des configurations ---
+from app.database import Base
+import app.models  # ⚠️ important pour que Base connaisse toutes les tables
+
+# --- Alembic Config ---
 config = context.config
 
-# Interpret the config file for Python logging.
+# Logging
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-# set sqlalchemy.url from env if available
-from ..config import settings
+# --- Chargement des variables d'environnement ---
+from app.config import settings  # Assure-toi que ce fichier existe et définit SQLALCHEMY_DATABASE_URL
 
-# Use consolidated DATABASE_URL if available, otherwise built URL
+# --- Configuration de la base ---
 config.set_main_option("sqlalchemy.url", settings.SQLALCHEMY_DATABASE_URL)
 
-# add your model's MetaData object here for 'autogenerate' support
-# from myapp import mymodel
-# target_metadata = mymodel.Base.metadata
-target_metadata = None
+# --- Cœur de la configuration Alembic ---
+target_metadata = Base.metadata
 
 
 def run_migrations_offline():
+    """Exécuter les migrations sans connexion directe (ex: script SQL généré)."""
     url = config.get_main_option("sqlalchemy.url")
-    context.configure(url=url, target_metadata=target_metadata, literal_binds=True)
+    context.configure(
+        url=url,
+        target_metadata=target_metadata,
+        literal_binds=True,
+        compare_type=True,
+    )
 
     with context.begin_transaction():
         context.run_migrations()
 
 
 def run_migrations_online():
+    """Exécuter les migrations directement sur la base."""
     connectable = engine_from_config(
         config.get_section(config.config_ini_section),
         prefix="sqlalchemy.",
@@ -42,7 +48,12 @@ def run_migrations_online():
     )
 
     with connectable.connect() as connection:
-        context.configure(connection=connection, target_metadata=target_metadata)
+        context.configure(
+            connection=connection,
+            target_metadata=target_metadata,
+            compare_type=True,  # détecte les changements de type de colonne
+            compare_server_default=True,  # détecte les defaults modifiés
+        )
 
         with context.begin_transaction():
             context.run_migrations()
