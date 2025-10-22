@@ -4,8 +4,10 @@ uvicorn[standard]==0.30.0
 
 # Database & ORM
 SQLAlchemy==2.0.30
-psycopg2-binary==2.9.9
+#psycopg2-binary==2.9.9
 alembic==1.13.1
+asyncpg==0.29.0
+sqlalchemy-utils==0.41.2
 
 # Authentification & sécurité
 python-jose[cryptography]==3.3.0

@@ -1,65 +1,99 @@
+"""
+Alembic environment configuration for CollabQuiz
+Supports async SQLAlchemy 2.0+
+"""
+
+import asyncio
+import sys
+from pathlib import Path
 from logging.config import fileConfig
-import os
-
-from sqlalchemy import engine_from_config, pool
 from alembic import context
+from sqlalchemy import pool
+from sqlalchemy.ext.asyncio import async_engine_from_config
+from sqlalchemy.engine import Connection
 
-# --- Import des configurations ---
-from app.database import Base
-from app.models import *
-from app.config  import settings
+# ------------------------------------------------------------------------------
+# 1️⃣ Charger la configuration et le .env à la racine du projet
+# ------------------------------------------------------------------------------
+BASE_DIR = Path(__file__).resolve().parent.parent  # backend/
+ROOT_DIR = BASE_DIR.parent  # racine du projet
+sys.path.insert(0, str(BASE_DIR))  # pour "app."
+sys.path.insert(0, str(ROOT_DIR))  # pour "backend.app" si besoin
 
-# --- Alembic Config ---
+from app.config import settings  # ✅ ton fichier config.py
+
+# ------------------------------------------------------------------------------
+# 2️⃣ Alembic configuration
+# ------------------------------------------------------------------------------
 config = context.config
 
-# Logging
+# Override sqlalchemy.url avec celle de settings (et donc du .env)
+config.set_main_option("sqlalchemy.url", settings.SQLALCHEMY_DATABASE_URL)
+
+# Logging Alembic
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-# --- Chargement des variables d'environnement ---
-from app.config import settings  # Assure-toi que ce fichier existe et définit SQLALCHEMY_DATABASE_URL
+# ------------------------------------------------------------------------------
+# 3️⃣ Importer les métadonnées des modèles
+# ------------------------------------------------------------------------------
+from app.models import Base
 
-# --- Configuration de la base ---
-config.set_main_option("sqlalchemy.url", settings.SQLALCHEMY_DATABASE_URL)
-
-# --- Cœur de la configuration Alembic ---
 target_metadata = Base.metadata
 
 
-def run_migrations_offline():
-    """Exécuter les migrations sans connexion directe (ex: script SQL généré)."""
+# ------------------------------------------------------------------------------
+# 4️⃣ Fonctions de migration
+# ------------------------------------------------------------------------------
+def run_migrations_offline() -> None:
+    """Run migrations in 'offline' mode."""
     url = config.get_main_option("sqlalchemy.url")
     context.configure(
         url=url,
         target_metadata=target_metadata,
         literal_binds=True,
+        dialect_opts={"paramstyle": "named"},
         compare_type=True,
+        compare_server_default=True,
     )
-
     with context.begin_transaction():
         context.run_migrations()
 
 
-def run_migrations_online():
-    """Exécuter les migrations directement sur la base."""
-    connectable = engine_from_config(
+def do_run_migrations(connection: Connection) -> None:
+    """Run migrations with the given connection."""
+    context.configure(
+        connection=connection,
+        target_metadata=target_metadata,
+        compare_type=True,
+        compare_server_default=True,
+    )
+    with context.begin_transaction():
+        context.run_migrations()
+
+
+async def run_async_migrations() -> None:
+    """Run migrations in 'online' mode (async)."""
+    connectable = async_engine_from_config(
         config.get_section(config.config_ini_section),
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
     )
 
-    with connectable.connect() as connection:
-        context.configure(
-            connection=connection,
-            target_metadata=target_metadata,
-            compare_type=True,  # détecte les changements de type de colonne
-            compare_server_default=True,  # détecte les defaults modifiés
-        )
+    async with connectable.connect() as connection:
+        await connection.run_sync(do_run_migrations)
 
-        with context.begin_transaction():
-            context.run_migrations()
+    await connectable.dispose()
 
 
+def run_migrations_online() -> None:
+    """Wrapper pour exécuter les migrations en mode online."""
+    asyncio.run(run_async_migrations())
+
+
+# ------------------------------------------------------------------------------
+# 5️⃣ Lancer la bonne fonction
+# ------------------------------------------------------------------------------
 if context.is_offline_mode():
     run_migrations_offline()
 else:
