@@ -1,0 +1,384 @@
+# ============================================================================
+# COLLABQUIZ - .gitignore
+# Backend (Python/FastAPI) + Frontend (Vue.js)
+# ============================================================================
+
+# ============================================================================
+# PYTHON / BACKEND
+# ============================================================================
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.Python
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Distribution / packaging
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+pytest.ini
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# ============================================================================
+# ALEMBIC / DATABASE
+# ============================================================================
+
+# Alembic
+alembic/versions/*.pyc
+alembic/__pycache__/
+
+# Database files (SQLite - si utilisé pour tests)
+*.db
+*.sqlite
+*.sqlite3
+
+# ============================================================================
+# ENVIRONMENT VARIABLES
+# ============================================================================
+
+# Environment files (IMPORTANT - ne jamais commit !)
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+.env.test
+*.env
+
+# ============================================================================
+# LOGS
+# ============================================================================
+
+*.log
+logs/
+*.log.*
+log/
+
+# ============================================================================
+# DOCKER
+# ============================================================================
+
+# Docker volumes
+postgres_data/
+pgdata/
+
+# Docker Compose override
+docker-compose.override.yml
+
+# ============================================================================
+# NODE.JS / FRONTEND (Vue.js)
+# ============================================================================
+
+# Dependencies
+node_modules/
+jspm_packages/
+
+# Build output
+dist/
+dist-ssr/
+build/
+.next/
+out/
+
+# Vite
+.vite/
+*.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.sublime-project
+*.sublime-workspace
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn
+.yarn-integrity
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+
+# ============================================================================
+# OS SPECIFIC
+# ============================================================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# ============================================================================
+# IDE / EDITORS
+# ============================================================================
+
+# VSCode
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+.history/
+
+# PyCharm / JetBrains
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+.idea_modules/
+atlassian-ide-plugin.xml
+com_crashlytics_export_strings.xml
+crashlytics.properties
+crashlytics-build.properties
+fabric.properties
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+Session.vim
+Sessionx.vim
+.netrwhist
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# ============================================================================
+# TESTING
+# ============================================================================
+
+# Coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+.pytest_cache/
+coverage/
+
+# E2E tests
+/tests/e2e/videos/
+/tests/e2e/screenshots/
+cypress/videos/
+cypress/screenshots/
+
+# ============================================================================
+# TEMPORARY FILES
+# ============================================================================
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.bak
+*.swp
+*.swo
+*~.nib
+local.properties
+.loadpath
+.recommenders
+
+# ============================================================================
+# SECURITY (CRITICAL - NEVER COMMIT!)
+# ============================================================================
+
+# Secrets
+*.pem
+*.key
+*.cert
+*.crt
+id_rsa
+id_rsa.pub
+*.p12
+*.pfx
+
+# API Keys / Tokens
+.secrets/
+secrets.json
+credentials.json
+
+# ============================================================================
+# PROJECT SPECIFIC
+# ============================================================================
+
+# Upload directories (si tu gères des uploads de fichiers)
+uploads/
+media/
+static/media/
+
+# Generated files
+generated/
+
+# Cache directories
+.cache/
+cache/
+
+# Documentation builds
+docs/_build/
+docs/.doctrees/
+
+# Backup files
+*.backup
+backup/
+
+# ============================================================================
+# KEEP STRUCTURE (Optional - pour garder des dossiers vides dans Git)
+# ============================================================================
+
+# Keep empty directories with .gitkeep
+!.gitkeep
