@@ -1,9 +1,26 @@
 import os
 from dataclasses import dataclass
+from dotenv import load_dotenv
+from pathlib import Path
 
+# On charge le .env depuis la racine du projet
+BASE_DIR = Path(__file__).resolve().parent.parent.parent  # remonte de /backend/app jusqu'à la racine
+env_path = BASE_DIR / ".env"
+if env_path.exists():
+    load_dotenv(dotenv_path=env_path)
+else:
+    print(f" Fichier .env non trouvé à {env_path}")
 
 @dataclass
 class Settings:
+
+    # Détection automatique : local ou Docker
+    IS_RUNNING_LOCAL: bool = os.getenv("RUNNING_LOCAL", "false").lower() == "true"
+
+    # Database
+    POSTGRES_HOST: str = (
+        "localhost" if IS_RUNNING_LOCAL else os.getenv("POSTGRES_HOST", "db")
+    )
     """
     Configuration principale de l’application CollabQuiz.
     Charge les variables d’environnement (Docker ou .env local).
@@ -39,12 +56,12 @@ class Settings:
         if db_url:
             # Si une URL complète est fournie (ex: Render, Railway, etc.)
             if db_url.startswith("postgres://"):
-                db_url = db_url.replace("postgres://", "postgresql+psycopg2://", 1)
+                db_url = db_url.replace("postgres://", "postgresql+asyncpg://", 1)
             return db_url
 
         # Sinon, construire l’URL à partir des variables individuelles
         return (
-            f"postgresql+psycopg2://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}"
+            f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}"
             f"@{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
         )
 
